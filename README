@@ -1,4 +1,8 @@
 .
 |-- README
-`-- scripts
-    `-- backup.rake
+|-- scripts
+|   `-- backup.rake
+`-- shell
+    `-- new_env_ubuntu_install.sh
+
+2 directories, 3 files
