@@ -3,6 +3,7 @@
 |-- scripts
 |   `-- backup.rake
 `-- shell
-    `-- new_env_ubuntu_install.sh
+    |-- new_env_ubuntu_install.sh
+    `-- new_pwd.sh
 
-2 directories, 3 files
+2 directories, 4 files
