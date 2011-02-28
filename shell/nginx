@@ -11,7 +11,7 @@
 ### END INIT INFO
 
 ### BEGIN CONFIG INFO
-# sudo wget /etc/init.d/nginx
+# sudo wget https://github.com/RobinWu/snippets/raw/master/shell/nginx /etc/init.d/nginx
 # sudo chmod +x /etc/init.d/nginx
 # pid        /var/run/nginx.pid;
 #
