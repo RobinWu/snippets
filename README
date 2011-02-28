@@ -4,6 +4,7 @@
 |   `-- backup.rake
 `-- shell
     |-- new_env_ubuntu_install.sh
-    `-- new_pwd.sh
+    |-- new_pwd.sh
+    `-- nginx
 
-2 directories, 4 files
+2 directories, 5 files
