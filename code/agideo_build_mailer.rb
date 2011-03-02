@@ -8,7 +8,7 @@
 #  AgideoBuildMailer.send(template, build, @emails, from, *args)
 #
 # console test
-# AgideoBuildMailer.send(['robin.wu.cn@gmail.com','86695893@qq.com'], 'test fail')
+# AgideoBuildMailer.send(['***@gmail.com','***@qq.com'], 'test fail')
 
 class AgideoBuildMailer
   def self.deliver_build_report(build, recipients, from, subject, message, sent_at = Time.now)
