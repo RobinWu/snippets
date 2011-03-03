@@ -2,17 +2,14 @@
 # https://github.com/thoughtworks/cruisecontrol.rb
 # 
 # vi lib/builder_plugins/email_notifier.rb
-# change
-#  BuildMailer.send(template, build, @emails, from, *args)
-# TO
-#  AgideoBuildMailer.sent(template, build, @emails, from, *args)
+# change BuildMailer to AgideoBuildMailer
 #
 # console test
 # AgideoBuildMailer.sent(['***@gmail.com','***@qq.com'], 'test fail')
 
 class AgideoBuildMailer
   def self.deliver_build_report(build, recipients, from, subject, message, sent_at = Time.now)
-    self.send(recipients, subject)
+    self.sent(recipients, subject)
   end
 
   def self.sent(recipients, subject)
