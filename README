@@ -1,10 +1,13 @@
 .
 |-- README
+|-- code
+|   `-- agideo_build_mailer.rb
 |-- scripts
 |   `-- backup.rake
 `-- shell
+    |-- install_softwares_on_ubuntu.sh
     |-- new_env_ubuntu_install.sh
     |-- new_pwd.sh
     `-- nginx
 
-2 directories, 5 files
+3 directories, 7 files
