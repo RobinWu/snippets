@@ -17,7 +17,7 @@
 ### BEGIN USING INFO
 # http://mirrors.163.com
 # replace /etc/apt/sources.list
-# sudo curl *** | bash
+# sudo curl https://github.com/RobinWu/snippets/raw/master/shell/install_softwares_on_ubuntu.sh | bash
 ### END USING INFO
 
 sudo apt-get install dialog
@@ -108,7 +108,6 @@ install_all(){
   install_nginx_and_passenger
   install_mysql
   install_sqlite3
-  install_all
 }
 echo_hand_config_info() {
   echo -e "\033[32m"
