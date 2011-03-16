@@ -68,7 +68,6 @@ install_git() {
   git config --global color.status auto
   git config --global color.branch auto
   git config --global color.ui auto
-  # if_install_git="yes"
 }
 install_vim() {
   sudo apt-get install ctags install vim-gnome
@@ -90,7 +89,6 @@ install_nginx_and_passenger() {
   sudo wget https://github.com/RobinWu/snippets/raw/master/shell/nginx /etc/init.d/nginx
   sudo chmod +x /etc/init.d/nginx
   sudo /usr/sbin/update-rc.d -f nginx defaults
-  # if_install_nginx='yes'
 }
 install_mysql() {
   sudo apt-get install mysql-server mysql-client libmysql-ruby libmysqlclient-dev
@@ -113,18 +111,21 @@ install_all(){
   install_all
 }
 echo_hand_config_info() {
+  echo -e "\033[32m"
   echo "请手动配置:"
-  # if ["$if_install_git" == "yes"]; then
-    echo "-------------------git-------------------"
-    echo "git config --global user.name ***"
-    echo "git config --global user.email ***@gmail.com"
-  # fi
-
-  # if ["$if_install_nginx" == "yes"]; then
-    echo "-------------------nginx-------------------"
-    echo "sudo vi /opt/nginx/conf/nginx.conf"
-    echo "pid /var/run/nginx.pid;"
-  # fi
+  echo "-------------------git-------------------"
+  echo "git config --global user.name ***"
+  echo "git config --global user.email ***@gmail.com"
+  echo ""
+  echo "-------------------nginx-------------------"
+  echo "sudo vi /opt/nginx/conf/nginx.conf"
+  echo "pid /var/run/nginx.pid;"
+  echo ""
+  echo "-------------------mysql-------------------"
+  echo "sudo vi /etc/mysql/my.conf"
+  echo "[mysqld]"
+  echo "default-character-set=utf8"
+  echo -e "\033[39m"
 }
 
 if [ "$choice" != '' ]; then
