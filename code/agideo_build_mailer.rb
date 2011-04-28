@@ -6,6 +6,9 @@
 #
 # console test
 # AgideoBuildMailer.sent(['***@gmail.com','***@qq.com'], 'test fail')
+#
+# vi app/models/agideo_build_mailer.rb
+# follow code
 
 class AgideoBuildMailer
   def self.deliver_build_report(build, recipients, from, subject, message, sent_at = Time.now)
