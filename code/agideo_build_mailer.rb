@@ -15,7 +15,7 @@ class AgideoBuildMailer
     self.sent(build, recipients, subject)
   end
 
-  def self.sent(recipients, subject)
+  def self.sent(build, recipients, subject)
     subject = CGI.escape("#{subject} by #{build.project.source_control.latest_revision.author}")
     cmd = "curl -s \"http://agi-notes.heroku.com/send_mail?t=#{recipients.join(",")}&s=#{subject}&b=#{subject}\""
     `#{cmd}`
