@@ -12,7 +12,7 @@
 
 class AgideoBuildMailer
   def self.deliver_build_report(build, recipients, from, subject, message, sent_at = Time.now)
-    self.sent(recipients, subject)
+    self.sent(build, recipients, subject)
   end
 
   def self.sent(recipients, subject)
