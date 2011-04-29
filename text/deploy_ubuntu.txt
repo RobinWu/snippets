@@ -1,0 +1,33 @@
+1. 下载远程控制 Team Viewer
+2. 安装 vmware
+3. 安装系统 ubuntu-10.04.1-server-i386
+4. 备份虚拟机 
+5. putty 登陆虚拟机
+6. 修改root agideo 密码
+  sudo passwd *
+  root: ****
+  agideo: ****
+7. 固定IP
+  sudo vi /etc/network/interfaces
+  auto eth0
+  iface eth0 inet static
+  address 192.168.0.*
+  netmask 255.255.255.0
+  gateway 192.168.0.1
+8. 修改源
+  http://mirrors.163.com
+  sudo apt-get update
+  sudo apt-get upgrade
+  sudo apt-get dist-upgrade
+9. rvm + ree 
+  sudo apt-get install curl
+  sudo apt-get install git-core
+  bash < <( curl http://rvm.beginrescueend.com/releases/rvm-install-head )
+  rvm update && rvm reload
+  vi ~/.bashrc
+  && source "$HOME/.rvm/scripts/rvm" 
+  sudo apt-get install build-essential bison openssl libreadline5 libreadline-dev curl git-core zlib1g zlib1g-dev libssl-dev vim libsqlite3-0 libsqlite3-dev sqlite3 libxml2-dev git-core subversion autoconf
+  rvm install ree
+10. sudo apt-get install mysql mysql-server mysql-client libmysql-ruby libmysqlclient-dev
+11. gem install mysql
+12. gem install rails -v=2.3.8

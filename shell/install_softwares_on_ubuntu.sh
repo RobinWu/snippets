@@ -91,7 +91,7 @@ install_nginx_and_passenger() {
   sudo /usr/sbin/update-rc.d -f nginx defaults
 }
 install_mysql() {
-  sudo apt-get install mysql-server mysql-client libmysql-ruby libmysqlclient-dev
+  sudo apt-get install mysql-server-5.0 mysql-client-5.0 libmysql-ruby libmysqlclient-dev
   gem install mysql
 }
 install_sqlite3() {
