@@ -77,7 +77,7 @@ install_vim() {
   ln -s ~/.vim/vimrc ~/.vimrc
 }
 install_rvm_and_ree() {
-  bash < <( curl http://rvm.beginrescueend.com/releases/rvm-install-head)
+  bash < <(curl -s https://rvm.beginrescueend.com/install/rvm)
   ~/.rvm/scripts/rvm update && ~/.rvm/scripts/rvm reload
   echo 'source "$HOME/.rvm/scripts/rvm"' >> ~/.bashrc
   sudo apt-get install build-essential bison libreadline5 libreadline-dev zlib1g zlib1g-dev libssl-devlibxml2-dev autoconf
