@@ -20,7 +20,9 @@
 # sudo curl https://github.com/RobinWu/snippets/raw/master/shell/install_softwares_on_ubuntu.sh | bash
 ### END USING INFO
 
-sudo apt-get install dialog
+### BEGIN REQUIREMENT SOFTWARE
+# sudo apt-get install curl dialog
+### END REQUIREMENT SOFTWARE
 
 DIALOG=${DIALOG=dialog}
 tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
