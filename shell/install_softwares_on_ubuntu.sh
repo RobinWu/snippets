@@ -101,10 +101,10 @@ install_sqlite3() {
   gem install sqlite3-ruby
 }
 install_all(){
-  upgrade_system
-  update_timezone
-  install_curl
-  install_git
+  # upgrade_system
+  # update_timezone
+  # install_curl
+  # install_git
   install_vim
   install_rvm_and_ree
   install_nginx_and_passenger
