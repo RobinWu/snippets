@@ -24,6 +24,8 @@
 # sudo apt-get install curl dialog
 ### END REQUIREMENT SOFTWARE
 
+sudo apt-get install curl dialog -y
+
 DIALOG=${DIALOG=dialog}
 tempfile=`tempfile 2>/dev/null` || tempfile=/tmp/test$$
 trap "rm -f $tempfile" 0 1 2 5 15
@@ -60,6 +62,7 @@ install_curl() {
 }
 install_git() {
   sudo apt-get install git-core -y
+  # TODO generate ssh
   git config --global alias.st status
   git config --global alias.ci "commit -a"
   git config --global alias.co checkout
@@ -73,6 +76,8 @@ install_git() {
 }
 install_vim() {
   sudo apt-get install ctags vim-gnome -y
+  mkdir ~/backup
+  mv ~/.vim ~/backup/vim
   git clone git@github.com:RobinWu/vim-dev-env.git ~/.vim
   ln -s ~/.vim/vimrc ~/.vimrc
 }
@@ -80,20 +85,22 @@ install_rvm_and_ree() {
   bash < <(curl -s https://rvm.beginrescueend.com/install/rvm)
   ~/.rvm/scripts/rvm update && ~/.rvm/scripts/rvm reload
   echo 'source "$HOME/.rvm/scripts/rvm"' >> ~/.bashrc
-  sudo apt-get install build-essential bison libreadline5 libreadline-dev zlib1g zlib1g-dev libssl-devlibxml2-dev autoconf
-  ~/.rvm/scripts/rvm install ree
-  ~/.rvm/scripts/rvm ree
+  sudo apt-get install build-essential bison libreadline5 libreadline-dev zlib1g zlib1g-dev libssl-dev libxml2-dev autoconf -y
+  ~/.rvm/bin/rvm install ree
+  ~/.rvm/bin/rvm ree --default
 }
 install_nginx_and_passenger() {
+  sudo apt-get install libcurl4-openssl-dev -y
   ~/.rvm/scripts/rvm ree
   gem install passenger
+  ~/.rvm/scripts/rvm ree
   rvmsudo passenger-install-nginx-module
   sudo wget https://github.com/RobinWu/snippets/raw/master/shell/nginx /etc/init.d/nginx
   sudo chmod +x /etc/init.d/nginx
   sudo /usr/sbin/update-rc.d -f nginx defaults
 }
 install_mysql() {
-  sudo apt-get install mysql-server-5.0 mysql-client-5.0 libmysql-ruby libmysqlclient-dev -y
+  sudo apt-get install mysql-server mysql-client libmysql-ruby libmysqlclient-dev -y
   gem install mysql
 }
 install_sqlite3() {
@@ -101,10 +108,10 @@ install_sqlite3() {
   gem install sqlite3-ruby
 }
 install_all(){
-  # upgrade_system
-  # update_timezone
-  # install_curl
-  # install_git
+  upgrade_system
+  update_timezone
+  install_curl
+  install_git
   install_vim
   install_rvm_and_ree
   install_nginx_and_passenger
@@ -115,8 +122,8 @@ echo_hand_config_info() {
   echo -e "\033[32m"
   echo "请手动配置:"
   echo "-------------------git-------------------"
-  echo "git config --global user.name ***"
-  echo "git config --global user.email ***@gmail.com"
+  echo "git config --global user.name RobinWu"
+  echo "git config --global user.email robin.wu.cn@gmail.com"
   echo ""
   echo "-------------------nginx-------------------"
   echo "sudo vi /opt/nginx/conf/nginx.conf"
