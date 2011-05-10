@@ -53,13 +53,13 @@ upgrade_system() {
   sudo apt-get dist-upgrade
 }
 update_timezone() {
-  sudo dpkg-reconfigure tzdata
+  sudo dpkg-reconfigure tzdata -y
 }
 install_curl() {
-  sudo apt-get install curl
+  sudo apt-get install curl -y
 }
 install_git() {
-  sudo apt-get install git-core
+  sudo apt-get install git-core -y
   git config --global alias.st status
   git config --global alias.ci "commit -a"
   git config --global alias.co checkout
@@ -72,7 +72,7 @@ install_git() {
   git config --global color.ui auto
 }
 install_vim() {
-  sudo apt-get install ctags install vim-gnome
+  sudo apt-get install ctags install vim-gnome -y
   git clone git@github.com:RobinWu/vim-dev-env.git ~/.vim
   ln -s ~/.vim/vimrc ~/.vimrc
 }
@@ -93,11 +93,11 @@ install_nginx_and_passenger() {
   sudo /usr/sbin/update-rc.d -f nginx defaults
 }
 install_mysql() {
-  sudo apt-get install mysql-server-5.0 mysql-client-5.0 libmysql-ruby libmysqlclient-dev
+  sudo apt-get install mysql-server-5.0 mysql-client-5.0 libmysql-ruby libmysqlclient-dev -y
   gem install mysql
 }
 install_sqlite3() {
-  sudo apt-get install sqlite3 swig libsqlite3-ruby libsqlite3-dev
+  sudo apt-get install sqlite3 swig libsqlite3-ruby libsqlite3-dev -y
   gem install sqlite3-ruby
 }
 install_all(){
