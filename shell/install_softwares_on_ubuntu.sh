@@ -53,7 +53,7 @@ upgrade_system() {
   sudo apt-get dist-upgrade
 }
 update_timezone() {
-  sudo dpkg-reconfigure tzdata -y
+  sudo dpkg-reconfigure tzdata
 }
 install_curl() {
   sudo apt-get install curl -y
@@ -72,7 +72,7 @@ install_git() {
   git config --global color.ui auto
 }
 install_vim() {
-  sudo apt-get install ctags install vim-gnome -y
+  sudo apt-get install ctags vim-gnome -y
   git clone git@github.com:RobinWu/vim-dev-env.git ~/.vim
   ln -s ~/.vim/vimrc ~/.vimrc
 }
