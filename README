@@ -1,4 +1,6 @@
-.
+漂亮的ubuntu.git 路径
+curl -s https://github.com/RobinWu/snippets/raw/master/code/system_git_path.txt >> ~/.bashrc
+
 ├── code
 │   ├── agideo_build_mailer.rb
 │   └── system_git_path.txt
