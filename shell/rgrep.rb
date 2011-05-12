@@ -1,9 +1,10 @@
+#!/usr/bin/env ruby
 # REF: https://github.com/alvin2ye/agideo/raw/master/rgrep/rgrep.rb
 #
 # USAGE:
-# curl -s https://github.com/RobinWu/snippets/blob/master/shell/rgrep.rb > /usr/bin/rgrep
-# sudo chmod _x /usr/bin/rgrep
-#
+# curl -s https://github.com/alvin2ye/agideo/raw/master/rgrep/rgrep.rb > /tmp/rgrep
+# sudo cp /tmp/rgrep /usr/local/sbin/rgrep
+# sudo chmod +x /usr/local/sbin/rgrep
 
 class RGrep
   class Annotation < Struct.new(:line, :text)
@@ -24,7 +25,7 @@ class RGrep
     @tag = tag
   end
 
-  def find(dirs=%w(app lib test spec config))
+  def find(dirs=%w(app lib test spec config public spec))
     dirs.inject({}) { |h, dir| h.update(find_in(dir)) }
   end
 
