@@ -2,7 +2,7 @@
 # REF: https://github.com/alvin2ye/agideo/raw/master/rgrep/rgrep.rb
 #
 # USAGE:
-# curl -s https://github.com/alvin2ye/agideo/raw/master/rgrep/rgrep.rb > /tmp/rgrep
+# curl -s https://github.com/RobinWu/snippets/raw/master/shell/rgrep.rb > /tmp/rgrep
 # sudo cp /tmp/rgrep /usr/local/sbin/rgrep
 # sudo chmod +x /usr/local/sbin/rgrep
 
