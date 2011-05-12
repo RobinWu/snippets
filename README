@@ -1,6 +1,6 @@
 漂亮的ubuntu.git 路径
 curl -s https://github.com/RobinWu/snippets/raw/master/code/system_git_path.txt >> ~/.bashrc
-
+.
 ├── code
 │   ├── agideo_build_mailer.rb
 │   └── system_git_path.txt
@@ -18,9 +18,10 @@ curl -s https://github.com/RobinWu/snippets/raw/master/code/system_git_path.txt 
 │   ├── nginx
 │   ├── nong_li_backup.rb
 │   ├── nong_li.rb
+│   ├── require_softwares.sh
 │   ├── reset.sh
 │   └── scrot.sh
 └── text
     └── deploy_ubuntu.txt
 
-4 directories, 17 files
+4 directories, 18 files
