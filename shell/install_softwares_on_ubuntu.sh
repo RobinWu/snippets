@@ -90,9 +90,9 @@ install_rvm_and_ree() {
 install_nginx_and_passenger() {
   sudo apt-get install libcurl4-openssl-dev -y
   ~/.rvm/bin/rvm ree
-  gem install passenger
+  ~/.rvm/bin/gem install passenger
   ~/.rvm/bin/rvm ree
-  rvmsudo passenger-install-nginx-module
+  ~/.rvm/bin/rvmsudo passenger-install-nginx-module
   sudo wget https://github.com/RobinWu/snippets/raw/master/shell/nginx /etc/init.d/nginx
   sudo chmod +x /etc/init.d/nginx
   sudo /usr/sbin/update-rc.d -f nginx defaults
