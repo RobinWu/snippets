@@ -19,7 +19,7 @@ end
 opts.parse(ARGV)
 
 class GeneratePassword
-  @chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ23456789!@#$%^&*()_+-='
+  @chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ23456789'
   @length = 10
   
   def self.get(options={})
