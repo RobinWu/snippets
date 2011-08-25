@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# curl https://raw.github.com/RobinWu/snippets/master/shell/back_mysql.rb -o /tmp/backup_mysql
+# curl https://raw.github.com/RobinWu/snippets/master/shell/backup_mysql.rb -o /tmp/backup_mysql
 # chmod +x /tmp/backup_mysql
 # mv /tmp/backup_mysql /usr/local/bin/
 #
