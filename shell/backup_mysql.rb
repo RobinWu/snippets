@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 #
+# apt-get install gzip
 # curl https://raw.github.com/RobinWu/snippets/master/shell/backup_mysql.rb -o /tmp/backup_mysql
 # chmod +x /tmp/backup_mysql
 # mv /tmp/backup_mysql /usr/local/bin/
@@ -9,6 +10,7 @@ require 'rubygems'
 require 'optparse'
 
 options = Hash.new()
+options[:zip] = false
 opts = OptionParser.new() do |opts|
   opts.on_tail("-h", "--help", "get help for this CMD") {
     print(opts)
@@ -34,17 +36,21 @@ opts = OptionParser.new() do |opts|
   opts.on("-o", "--output String", "Output file") { |file|
     options[:file] = file
   }
+  opts.on("-z", "--zip", "Zip output file") {
+    options[:zip] = true
+  }
 end
 opts.parse(ARGV)
 
 class Mysql
-  attr_accessor :user, :pwd, :db, :file
+  attr_accessor :user, :pwd, :db, :file, :zip
 
   def initialize(options={})
     self.user = options[:user]
     self.pwd = options[:pwd]
     self.db = options[:db]
     self.file = options[:file]
+    self.zip = options[:zip]
   end
 
   def user
@@ -84,7 +90,11 @@ class Mysql
       -e --max_allowed_packet=#{max_allowed_packet} --net_buffer_length=#{net_buffer_length} #{self.db} > #{self.file}
     CMD
     `#{cmd}`
-    self.file
+
+    return self.file unless self.zip
+
+    `gzip #{self.file}`
+    "#{self.file}.gz"
   end
 
   private
