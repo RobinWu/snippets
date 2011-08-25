@@ -48,33 +48,15 @@ class Mysql
   end
 
   def user
-    return @user if @user
-
-    puts 'Input database username:'
-    while s = $stdin.gets.chomp
-      @user = s
-      return @user
-    end
+    @user ||= gets_input_info('Input database username:')
   end
 
   def pwd
-    return @pwd if @pwd
-
-    puts 'Input database password:'
-    while s = $stdin.gets.chomp
-      @pwd = s
-      return @pwd
-    end
+    @pwd ||= gets_input_info('Input database password:')
   end
 
   def db
-    return @db if @db
-
-    puts 'Input database name:'
-    while s = $stdin.gets.chomp
-      @db = s
-      return @db
-    end
+    @db ||= gets_input_info('Input database name:')
   end
 
   def file
@@ -104,6 +86,15 @@ class Mysql
     `#{cmd}`
     self.file
   end
+
+  private
+
+    def gets_input_info(alert)
+      puts alert
+      while s = $stdin.gets.chomp
+        return s
+      end
+    end
 end
 
 puts Mysql.new(options).run
