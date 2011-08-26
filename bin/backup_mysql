@@ -13,8 +13,8 @@ options = {}
 OptionParser.new do |opts|
   opts.on_tail("-h", "--help", "get help for this CMD") { print(opts); exit() }
 
-  opts.on("-h", "--host String", "Database Host default 'localhost'") { |v| options[:host] = v }
-  opts.on("-u", "--user String", "Database user default 'root'")      { |v| options[:user] = v }
+  opts.on("-h", "--host String", "Mysql Host default 'localhost'") { |v| options[:host] = v }
+  opts.on("-u", "--user String", "Mysql user default 'root'")      { |v| options[:user] = v }
   opts.on("-p", "--pwd String", "Database password")                  { |v| options[:pwd] = v }
   opts.on("-d", "--db String", "Database name")                       { |v| options[:db] = v }
   opts.on("-o", "--output String", "Output file")                     { |v| options[:outfile] = v }
