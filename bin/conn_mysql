@@ -7,21 +7,26 @@ require 'rubygems'
 require 'mysql'
 
 def with_db
-  dbh = Mysql.real_connect('localhost', 'root', '***', '***')
+  config = {:host => 'localhost', :user => 'root', :pwd => '***', :db => '***'}
+  dbh = Mysql.connect(config[:host], config[:user], config[:pwd], config[:db])
+  dbh.query('SHOW VARIABLES;').each { |row| config[row[0].to_sym] = row[1] }.free;
 
   begin
-    yield dbh
+    yield dbh, config
   ensure
     dbh.close
   end
 end
 
 
-with_db do |dbh|
+# query test
+with_db do |dbh, config|
   # db.query(%{insert into mytable values ("hello","tt")})
-  res = dbh.query('show tables');
-  res.each do |row|
-     puts "#{row[0]} #{row[1]}"
-  end
-  res.free
+  #
+  # res = dbh.query('show tables');
+  # res.each do |row|
+  #    puts "#{row[0]} #{row[1]}"
+  # end
+  # res.free
+  puts config.inspect
 end
