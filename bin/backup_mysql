@@ -1,110 +1,70 @@
 #!/usr/bin/env ruby
-#
-# apt-get install gzip
-# curl https://raw.github.com/RobinWu/snippets/master/shell/backup_mysql.rb -o /tmp/backup_mysql
-# chmod +x /tmp/backup_mysql
-# mv /tmp/backup_mysql /usr/local/bin/
-#
 
 require 'rubygems'
 require 'optparse'
+require 'mysql'
 
-options = Hash.new()
-options[:zip] = false
-opts = OptionParser.new() do |opts|
-  opts.on_tail("-h", "--help", "get help for this CMD") {
-    print(opts)
-    txt = <<-TXT
+options = {}
+OptionParser.new do |opts|
+  opts.on_tail("-h", "--help", "get help for this CMD") { print(opts); exit() }
 
-       ============================================
-       Example
-       backup_mysql -u <user> -p <pwd> -d <database> -o <filename>
-    TXT
-    print(txt)
-    exit()
-  }
+  opts.on("-h", "--host String", "Database Host default 'localhost'") { |v| options[:host] = v }
+  opts.on("-u", "--user String", "Database user default 'root'")      { |v| options[:user] = v }
+  opts.on("-p", "--pwd String", "Database password")                  { |v| options[:pwd] = v }
+  opts.on("-d", "--db String", "Database name")                       { |v| options[:db] = v }
+  opts.on("-o", "--output String", "Output file")                     { |v| options[:outfile] = v }
+  opts.on("-z", "--[no-]verbose", "Compress outfile by gzip")         { |v| options[:zip] = v }
+  opts.on("-v", "--[no-]verbose", "Run verbosely")                    { |v| options[:verbose] = v }
+end.parse(ARGV)
 
-  opts.on("-u", "--user String", "Database user") { |user|
-    options[:user] = user
-  }
-  opts.on("-p", "--pwd String", "Database password") { |pwd|
-    options[:pwd] = pwd
-  }
-  opts.on("-d", "--db String", "Database name") { |db|
-    options[:db] = db
-  }
-  opts.on("-o", "--output String", "Output file") { |file|
-    options[:file] = file
-  }
-  opts.on("-z", "--zip", "Zip output file") {
-    options[:zip] = true
-  }
+def keyword_input(alert)
+  puts alert
+  while s = $stdin.gets.chomp
+    return s
+  end
 end
-opts.parse(ARGV)
 
-class Mysql
-  attr_accessor :user, :pwd, :db, :file, :zip
+def with_db(options={})
+  config = {:host => 'localhost', :user => 'root'}.merge(options)
+  config[:pwd] = keyword_input("Enter #{config[:user]} password:") if config[:pwd].nil?
+  config[:db] = keyword_input("Enter database name:") if config[:db].nil?
+  config[:outfile] = "#{config[:db]}-#{Time.now.strftime("%Y%m%d%H%M%S")}.sql" if config[:outfile].nil?
 
-  def initialize(options={})
-    self.user = options[:user]
-    self.pwd = options[:pwd]
-    self.db = options[:db]
-    self.file = options[:file]
-    self.zip = options[:zip]
+  dbh = Mysql.connect(config[:host], config[:user], config[:pwd], config[:db])
+  dbh.query('SHOW VARIABLES;').each { |row| config[row[0].to_sym] = row[1] }.free;
+
+  begin
+    yield dbh, config
+  ensure
+    dbh.close
   end
+end
 
-  def user
-    @user ||= gets_input_info('Input database username:')
-  end
-
-  def pwd
-    @pwd ||= gets_input_info('Input database password:')
-  end
-
-  def db
-    @db ||= gets_input_info('Input database name:')
-  end
-
-  def file
-    @file ||= "./#{self.db}#{Time.now.strftime("%Y%m%d%H%M%S")}.sql"
-  end
-
-  def net_buffer_length
+def backup(options={})
+  with_db(options) do |dbh, config|
     cmd = <<-CMD
-      mysql -u#{self.user} -p'#{self.pwd}' -e "SHOW VARIABLES LIKE 'net_buffer_length';"
-    CMD
-    `#{cmd}`.match(/(\d+)/) && $1
-  end
-
-  def max_allowed_packet
-    cmd = <<-CMD
-      mysql -u#{self.user} -p'#{self.pwd}' -e "SHOW VARIABLES LIKE 'max_allowed_packet';"
-    CMD
-    `#{cmd}`.match(/(\d+)/) && $1
-  end
-
-  def run
-    cmd = <<-CMD
-      mysqldump -u#{self.user} -p'#{self.pwd}' \
+      mysqldump -h #{config[:host]} -u #{config[:user]} -p'#{config[:pwd]}' \
       --skip-opt --create-option --set-charset --default-character-set=utf8 \
-      -e --max_allowed_packet=#{max_allowed_packet} --net_buffer_length=#{net_buffer_length} #{self.db} > #{self.file}
+      -e --max_allowed_packet=#{config[:max_allowed_packet]} --net_buffer_length=#{config[:net_buffer_length]} #{config[:db]} > #{config[:outfile]}
     CMD
+    puts cmd if config[:verbose]
     `#{cmd}`
-
-    return self.file unless self.zip
-
-    `gzip #{self.file}`
-    "#{self.file}.gz"
+    config[:outfile]
   end
-
-  private
-
-    def gets_input_info(alert)
-      puts alert
-      while s = $stdin.gets.chomp
-        return s
-      end
-    end
 end
 
-puts Mysql.new(options).run
+def compress(file)
+  puts `gzip -f #{file}`
+  "#{file}.gz"
+end
+
+def run(options={})
+  outfile = backup(options)
+  if options[:zip]
+    puts compress(outfile)
+  else
+    puts outfile
+  end
+end
+
+run(options)
