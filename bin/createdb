@@ -1,77 +1,63 @@
 #!/usr/bin/env ruby
-#
-# curl https://raw.github.com/RobinWu/snippets/master/shell/createdb.rb -o /tmp/createdb
+
+# curl https://raw.github.com/RobinWu/snippets/master/bin/createdb -o /tmp/createdb
 # chmod +x /tmp/createdb
 # mv /tmp/createdb /usr/local/bin/
-#
 
 require 'rubygems'
 require 'optparse'
+require 'mysql'
 
-options = Hash.new()
-opts = OptionParser.new() do |opts|
-#   opts.on_tail("-h", "--help", "get help for this CMD") {
-#     print(opts)
-#     exit()
-#   }
-# 
-#   opts.on("-p", "--user String", "Database user") { |user|
-#     options[:user] = user
-#   }
-#   opts.on("-p", "--pwd String", "Database password") { |pwd|
-#     options[:pwd] = pwd
-#   }
-#   opts.on("-d", "--db String", "Database name") { |db|
-#     options[:db] = db
-#   }
-#   opts.on("-o", "--output String", "Output file") { |file|
-#     options[:file] = file
-#   }
+options = {}
+OptionParser.new do |opts|
+  opts.on_tail("-h", "--help", "get help for this CMD") { print(opts); exit() }
+
+  opts.on("-h",  "--host String", "Mysql Host default 'localhost'")    { |v| options[:host] = v }
+  opts.on("-p",  "--pwd String", "Mysql root password")                { |v| options[:pwd] = v }
+  opts.on("-d",  "--ndb String", "New database name")                  { |v| options[:ndb] = v }
+  opts.on("-u",  "--nuser String", "New database user")                { |v| options[:nuser] = v }
+  opts.on("-w",  "--npwd String", "New database password")             { |v| options[:npwd] = v }
+  opts.on("-v",  "--[no-]verbose", "Run verbosely")                    { |v| options[:verbose] = v }
+end.parse(ARGV)
+
+def keyword_input(alert)
+  puts alert
+  while s = $stdin.gets.chomp
+    return s
+  end
 end
-opts.parse(ARGV)
 
-class Mysql
-  attr_accessor :root_pwd, :new_db_name, :new_db_user, :new_db_pwd
+def with_db(options={})
+  config = {:host => 'localhost', :user => 'root'}.merge(options)
+  config[:pwd] = keyword_input("Enter #{config[:user]} password:") if config[:pwd].nil?
+  config[:ndb] = keyword_input("Enter new database name:") if config[:ndb].nil?
+  config[:nuser] = keyword_input("Enter new database user:") if config[:nuser].nil?
+  config[:npwd] = keyword_input("Enter new database password:") if config[:npwd].nil?
 
-  def initialize(options={})
+  dbh = Mysql.connect(config[:host], config[:user], config[:pwd])
+  begin
+    yield dbh, config
+  ensure
+    dbh.close
   end
+end
 
-  def gets_input_info(alert)
-    puts alert
-    while s = $stdin.gets.chomp
-      return s
-    end
-  end
+def run(options={})
+  with_db(options) do |dbh, config|
+    cmd = "CREATE DATABASE #{config[:ndb]} CHARACTER SET UTF8 COLLATE utf8_general_ci"
+    puts cmd if config[:verbose]
+    dbh.query(cmd)
 
-  def root_pwd
-    @root_pwd ||= gets_input_info('Input root pwd:')
-  end
-
-  def new_db_name
-    @new_db_name ||= gets_input_info('Input new database name:')
-  end
-
-  def new_db_user
-    @new_db_user ||= gets_input_info('Input new database user:')
-  end
-
-  def new_db_pwd
-    @new_db_pwd ||= gets_input_info('Input new database pwd:')
-  end
-
-  def run
-    cmd = <<-CMD
-       mysql -u root -p'#{self.root_pwd}' -e "CREATE DATABASE #{self.new_db_name} CHARACTER SET UTF8 COLLATE utf8_general_ci;" \
-       mysql -u root -p'#{self.root_pwd}' -e "GRANT all ON #{self.new_db_name}.* TO '#{self.new_db_user}'@'localhost' IDENTIFIED BY '#{self.new_db_pwd}';"
-    CMD
-    `#{cmd}`
+    cmd = "GRANT all ON #{config[:ndb]}.* TO '#{config[:nuser]}'@'localhost' IDENTIFIED BY '#{config[:npwd]}'"
+    puts cmd if config[:verbose]
+    dbh.query(cmd)
 
     <<-TXT
-       New database name: #{self.new_db_name}
-       New database user: #{self.new_db_user}
-       New database  pwd: #{self.new_db_pwd}
+       New database name: #{config[:ndb]}
+       New database user: #{config[:nuser]}
+       New database  pwd: #{config[:npwd]}
     TXT
   end
 end
 
-puts Mysql.new(options).run
+puts run(options)
