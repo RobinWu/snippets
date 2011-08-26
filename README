@@ -1,6 +1,16 @@
 漂亮的ubuntu.git 路径
 curl -s https://github.com/RobinWu/snippets/raw/master/code/system_git_path.txt >> ~/.bashrc
+
+4 directories, 18 files
 .
+├── bin
+│   ├── backup_mysql
+│   ├── conn_mysql
+│   ├── createdb
+│   ├── exp_csv
+│   ├── new_pwd
+│   ├── rdos2unix
+│   └── rgrep
 ├── code
 │   ├── agideo_build_mailer.rb
 │   └── system_git_path.txt
@@ -9,19 +19,25 @@ curl -s https://github.com/RobinWu/snippets/raw/master/code/system_git_path.txt 
 │   └── backup.rake
 ├── shell
 │   ├── bashrc.sh
+│   ├── httparty_google_example.rb
+│   ├── inside_ruby_translate.rb
 │   ├── install_agi_vim.sh
 │   ├── install_javascript_syntax_to_vim
 │   ├── install_softwares_on_ubuntu.sh
 │   ├── install_vim_javascript.sh
 │   ├── new_env_ubuntu_install.sh
-│   ├── new_pwd.sh
 │   ├── nginx
+│   ├── nokogiri_google.rb
+│   ├── nokogiri_redbaby.rb
+│   ├── nokogiri_test.rb
 │   ├── nong_li_backup.rb
 │   ├── nong_li.rb
+│   ├── patron_test.rb
 │   ├── require_softwares.sh
 │   ├── reset.sh
-│   └── scrot.sh
+│   ├── scrot.sh
+│   └── variable.sh
 └── text
     └── deploy_ubuntu.txt
 
-4 directories, 18 files
+5 directories, 31 files
