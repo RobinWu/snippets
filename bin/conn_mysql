@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+
+# REF
+# http://www.cnzzad.com/tut/57467.html
+
+require 'rubygems'
+require 'mysql'
+
+def with_db
+  dbh = Mysql.real_connect('localhost', 'root', '***', '***')
+
+  begin
+    yield dbh
+  ensure
+    dbh.close
+  end
+end
+
+
+with_db do |dbh|
+  # db.query(%{insert into mytable values ("hello","tt")})
+  res = dbh.query('show tables');
+  res.each do |row|
+     puts "#{row[0]} #{row[1]}"
+  end
+  res.free
+end
