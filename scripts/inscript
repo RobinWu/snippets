@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+rm -rf /tmp/snippets
+git clone git://github.com/RobinWu/snippets.git /tmp/snippets
+chmod +x /tmp/snippets/bin/*
+cp -f /tmp/snippets/bin/* /usr/local/bin/
