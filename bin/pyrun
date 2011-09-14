@@ -21,5 +21,6 @@ end
 opts.parse(ARGV)
 
 cmd = "cd #{options[:path]} && python -m SimpleHTTPServer"
+puts 'http://localhost:8000'
 puts cmd if options[:verbose]
 `#{cmd}`
