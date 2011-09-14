@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 
+# install bin to /usr/local/bin
+# https://raw.github.com/RobinWu/snippets/master/scripts/install_bin
+# curl https://raw.github.com/RobinWu/snippets/master/scripts/install_bin | subo bash
+
 rm -rf /tmp/snippets
 git clone git://github.com/RobinWu/snippets.git /tmp/snippets
 chmod +x /tmp/snippets/bin/*
 cp -f /tmp/snippets/bin/* /usr/local/bin/
+ls /usr/local/bin/
+rm -rf /tmp/snippets
