@@ -7,19 +7,21 @@
 # apt-get install python-setuptools
 # python -m SimpleHTTPServer
 
-require 'optparse'
+# require 'optparse'
 options = Hash.new()
-opts = OptionParser.new() do |opts|
-  opts.on_tail("-h", "--help", "get help for this CMD") {
-    print(opts)
-    exit()
-  }
+# opts = OptionParser.new() do |opts|
+#   opts.on_tail("-h", "--help", "get help for this CMD") {
+#     print(opts)
+#     exit()
+#   }
+# 
+#   opts.on("-p", "--path String", "Run directory")                     { |v| options[:path] = v }
+#   opts.on("-v", "--[no-]verbose", "Run verbosely")                    { |v| options[:verbose] = v }
+# end
+# opts.parse(ARGV)
 
-  opts.on("-p", "--path String", "Run directory")                     { |v| options[:path] = v }
-  opts.on("-v", "--[no-]verbose", "Run verbosely")                    { |v| options[:verbose] = v }
-end
-opts.parse(ARGV)
-
+options[:path] = ARGV.to_s
+options[:verbose] = true
 cmd = "cd #{options[:path]} && python -m SimpleHTTPServer"
 puts 'http://localhost:8000'
 puts cmd if options[:verbose]
