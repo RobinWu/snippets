@@ -1,0 +1,75 @@
+#!/usr/bin/env ruby
+
+# Example
+# jsspider -f <jsfile> -u <url> -o <outpath> | bash
+# "sounds/*.*"
+# "images/*.*"
+#
+# Example:
+# jsspider -f ~/html5/runner/js/runner.js -u http://www.riaidea.com/html5/runner -o ~/html5/runner | bash
+
+require 'optparse'
+
+options = Hash.new()
+opts = OptionParser.new() do |opts|
+  opts.on_tail("-h", "--help", "get help for this CMD") {
+    print(opts)
+    exit()
+  }
+
+  opts.on("-f", "--file String",  "Js file")                 { |v| options[:jsfile]  = v }
+  opts.on("-u", "--url String",   "url")                     { |v| options[:url]     = v }
+  opts.on("-o", "--output String","outpur path")             { |v| options[:outpath] = v }
+end
+opts.parse(ARGV)
+
+class JsSpider
+  attr_accessor :jsfile, :url, :sounds, :images, :outpath
+
+  def initialize(options={})
+    @jsfile = options[:jsfile]
+    @url = options[:url]
+    @outpath = File.expand_path(options[:outpath])
+    @sounds = []
+    @images = []
+  end
+
+  def downfiles_cmds
+    analyze_jsfile
+    cmds = []
+
+    sounds_path = File.join(outpath, 'sounds')
+    cmds << "mkdir #{sounds_path}"
+    cmds << "cd #{sounds_path}"
+    cmds += sounds.map do |filename|
+      "wget #{url}/sounds/#{filename}"
+    end
+
+    images_path = File.join(outpath, 'images')
+    cmds << "mkdir #{images_path}"
+    cmds << "cd #{images_path}"
+    cmds += images.map do |filename|
+      "wget #{url}/images/#{filename}"
+    end
+
+    cmds
+  end
+
+  private
+
+    def analyze_jsfile
+      file_content = File.new(self.jsfile).read
+
+      file_content.scan(/\"sounds\/(.*?)\"/) do |m|
+        sounds << m.first
+      end
+      sounds.uniq!
+
+      file_content.scan(/\"images\/(.*?)\"/) do |m|
+        images << m.first
+      end
+      images.uniq!
+    end
+end
+
+puts JsSpider.new(options).downfiles_cmds
