@@ -1,0 +1,50 @@
+#!/usr/bin/env ruby
+
+# Example
+# jsformat <jsfile> [> outfile]
+
+class JsFormat
+  attr_accessor :file
+
+  def initialize(file)
+    @file = file
+  end
+
+  def run
+    file_content = read_file
+    out = []
+    indent = 0;
+
+    file_content.split(//).each do |c|
+      case(c)
+      when '{':
+        indent += 1
+        out.push(c + "\n" + tabs(indent))
+      when '}':
+        indent -= 1
+        out.push("\n" + tabs(indent) + c)
+      when '?', ':', '=', '%':
+        out.push(" #{c} ")
+      when ';':
+        out.push(";\n" + tabs(indent))
+      else
+        out.push(c)
+      end
+    end
+
+    out.join('')
+  end
+
+
+  private
+
+  def tabs(count)
+    "  " * (count < -1 ? 0 : count )
+  end
+
+  def read_file
+    File.new(self.file).read
+  end
+end
+
+puts JsFormat.new(ARGV.to_s).run
