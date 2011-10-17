@@ -27,6 +27,8 @@ class JsFormat
         out.push(" #{c} ")
       when ';':
         out.push(";\n" + tabs(indent))
+      when ',':
+        out.push(",\n" + tabs(indent))
       else
         out.push(c)
       end
