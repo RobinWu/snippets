@@ -2,10 +2,11 @@
 
 # Example
 # exp_csv -u root -p -d <database> -t <table> -o <output-file>
+# ./exp_csv -u root -d doit_dev -t tasks -o task.csv
 #
 # SQL Example
 # SELECT columns FROM table_name WHERE whatever='something' INTO OUTFILE "/tmp/outfile.txt";
-# echo "SELECT columns FROM table_name WHERE whatever='something'" | /path/to/mysql -uUSERNAME -pPASSWORD DATABASENAME > /tmp/outfile.txt; 
+# echo "SELECT columns FROM table_name WHERE whatever='something'" | /path/to/mysql -uUSERNAME -pPASSWORD DATABASENAME > /tmp/outfile.txt;
 # /path/to/mysql -uUSERNAME -pPASSWORD DATABASENAME < /tmp/sql.sql > /tmp/outfile.txt;
 
 require 'optparse'
@@ -33,7 +34,7 @@ opts.parse(ARGV)
 
 # cmd = "echo 'SELECT * FROM #{options[:table]}' | mysql -u#{options[:user]} -p #{options[:db]} > #{options[:file]}"
 cmd = <<-CMD
-  mysql -u#{options[:user]} -p #{options[:db]} -B -e 'SELECT * FROM #{options[:table]}' | sed 's\/\\t\/","\/g;s\/^\/"\/;s\/$\/"\/;s\/\\n\/\/g' > #{options[:file]}
+  mysql -u#{options[:user]} -p #{options[:db]} -B -e 'SELECT * FROM #{options[:table]}' | sed 's/"/""/g' | sed 's\/\\t\/","\/g;s\/^\/"\/;s\/$\/"\/;s\/\\n\/\/g' > #{options[:file]}
 CMD
 `#{cmd}`
 print "."
