@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+
+# Example
+# ffind -f <file> -p <pattern> [-v]
+#
+# Example:
+# jsspider -f ~/html5/runner/js/runner.js -u http://www.riaidea.com/html5/runner -o ~/html5/runner | bash
+
+require 'optparse'
+
+options = Hash.new()
+opts = OptionParser.new() do |opts|
+  opts.on_tail("-h", "--help", "get help for this CMD") {
+    print(opts)
+    exit()
+  }
+  opts.on("-f", "--file String",  "file")                 { |v| options[:file]        = v }
+  opts.on("-p", "--pattern String",   "pattern")          { |v| options[:pattern]     = v }
+end
+opts.parse(ARGV)
+
+class FFind
+  attr_accessor :file, :pattern
+
+  def initialize(options={})
+    @file = options[:file]
+    @pattern = options[:pattern]
+    @verbose = options[:verbose]
+  end
+
+  def run
+    result = []
+    File.new(self.file).read.scan(Regexp.new(self.pattern)) do |m|
+      result << m.first
+    end
+    result
+  end
+end
+
+puts FFind.new(options).run
