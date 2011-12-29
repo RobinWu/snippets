@@ -28,6 +28,7 @@ Example
 exp_csv -uroot -ppwd -d dbname -s "SELECT id from table limit 5;"
 exp_csv -uroot -ppwd -d dbname -s "SELECT id from table limit 5;" --output /tmp/aaa.csv -V
 exp_csv -uroot -ppwd -d dbname -s "SELECT id from table limit 5;" --output /tmp/aaa.csv -V -c GB2312
+exp_csv -uroot -ppwd -d dbname -f /tmp/1.sql --output /tmp/aaa.csv -V -c GB2312
 
   HELP
 end
@@ -59,26 +60,29 @@ opts = OptionParser.new() do |opts|
   opts.on("-c", "--charset String", "GB2312, GBK, UTF8") { |charset|
     options[:charset] = charset
   }
+  opts.on("-f", "--sql_file String", "sql file") { |sql_file|
+    options[:sql_file] = sql_file
+  }
 end
 opts.parse(ARGV)
-
 
 if options[:file].blank?
   options[:file] = "/tmp/ext_csv_#{Time.now.to_f}.csv"
 end
 
-
 p options if options[:verbose]
 
-if options[:user].blank? || options[:db].blank? || options[:sql].blank?
+if options[:user].blank? || options[:db].blank?
   print_help(opts)
   exit()
 end
 
-options[:sql_file] = "#{options[:file]}.sql"
+if options[:sql_file].blank?
+  options[:sql_file] = "#{options[:file]}.sql"
 
-File.open(options[:sql_file], 'w') do |f|
-  f.puts options[:sql]
+  File.open(options[:sql_file], 'w') do |f|
+    f.puts options[:sql]
+  end
 end
 
 # mysql -u#{options[:user]} -p#{options[:password]} #{options[:db]} -B < #{options[:sql_file]} | sed 's/"/""/g' | sed 's\/'\$'\\t''\/","\/g;s\/^\/"\/;s\/$\/"\/;s\/\\n\/\/g' > #{options[:file]}
