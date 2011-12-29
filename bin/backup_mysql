@@ -1,11 +1,15 @@
 #!/usr/bin/env ruby
 
+# Dependeny:
+# gem install mysql
 # apt-get install gzip
+#
+# Install:
 # curl https://raw.github.com/RobinWu/snippets/master/bin/backup_mysql -o /tmp/backup_mysql
 # chmod +x /tmp/backup_mysql
 # mv /tmp/backup_mysql /usr/local/bin/
 #
-# examples:
+# Examples:
 # backup_mysql -u <user> -p <pwd> -d <db> -z
 # backup_mysql -u <user> -p <pwd> -d <db> -z | xargs curl -u <user> ftp.*.com:<port>/tmp/ -T
 
