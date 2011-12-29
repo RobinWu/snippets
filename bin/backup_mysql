@@ -4,6 +4,10 @@
 # curl https://raw.github.com/RobinWu/snippets/master/bin/backup_mysql -o /tmp/backup_mysql
 # chmod +x /tmp/backup_mysql
 # mv /tmp/backup_mysql /usr/local/bin/
+#
+# examples:
+# backup_mysql -u <user> -p <pwd> -d <db> -z
+# backup_mysql -u <user> -p <pwd> -d <db> -z | xargs curl -u <user> ftp.*.com:<port>/tmp/ -T
 
 require 'rubygems'
 require 'optparse'
