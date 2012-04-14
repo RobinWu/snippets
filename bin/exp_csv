@@ -26,7 +26,7 @@ VERSION 0.1
 
 Example
 exp_csv -uroot -ppwd -d dbname -s "SELECT id from table limit 5;"
-exp_csv -uroot -ppwd -d dbname -s "SELECT id from table limit 5;" --output /tmp/aaa.csv -V
+exp_csv -H localhost -uroot -ppwd -d dbname -s "SELECT id from table limit 5;" --output /tmp/aaa.csv -V
 exp_csv -uroot -ppwd -d dbname -s "SELECT id from table limit 5;" --output /tmp/aaa.csv -V -c GB2312
 exp_csv -uroot -ppwd -d dbname -f /tmp/1.sql --output /tmp/aaa.csv -V -c GB2312
 
@@ -63,11 +63,18 @@ opts = OptionParser.new() do |opts|
   opts.on("-f", "--sql_file String", "sql file") { |sql_file|
     options[:sql_file] = sql_file
   }
+  opts.on("-H", "--host String", "dbhost") { |v|
+    options[:host] = v
+  }
 end
 opts.parse(ARGV)
 
 if options[:file].blank?
   options[:file] = "/tmp/ext_csv_#{Time.now.to_f}.csv"
+end
+
+if options[:host].blank?
+  options[:host] = "localhost"
 end
 
 p options if options[:verbose]
@@ -85,9 +92,8 @@ if options[:sql_file].blank?
   end
 end
 
-# mysql -u#{options[:user]} -p#{options[:password]} #{options[:db]} -B < #{options[:sql_file]} | sed 's/"/""/g' | sed 's\/'\$'\\t''\/","\/g;s\/^\/"\/;s\/$\/"\/;s\/\\n\/\/g' > #{options[:file]}
 cmd = <<-CMD
-  mysql --default-character-set=utf8 -u#{options[:user]} -p#{options[:password]} #{options[:db]} -B < #{options[:sql_file]} | sed 's/"/""/g' | sed  's/\t/","/g;s/^/"/;s/$/"/;' > #{options[:file]}
+  mysql -h#{options[:host]} --default-character-set=utf8 -u#{options[:user]} -p#{options[:password]} #{options[:db]} -B < #{options[:sql_file]} | sed 's/"/""/g' | sed  's/\t/","/g;s/^/"/;s/$/"/;' > #{options[:file]}
 CMD
 
 puts cmd if options[:verbose]
