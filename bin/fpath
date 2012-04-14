@@ -1,0 +1,3 @@
+#!/bin/sh
+
+ruby -e 'printf("%s\n", File.expand_path(ARGV[0]).gsub(/^\/+/, "\/"))' $1
