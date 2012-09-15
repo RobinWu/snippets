@@ -25,15 +25,19 @@ run 'bundle install'
 rake 'db:create'
 generate "refinery:cms --fresh-installation #{ARGV.join(' ')}"
 
+run 'git init'
+run 'git add .'
+run "git ci -m 'first commit'"
+
+run 'heroku create'
+run 'heroku run bundle install'
+run 'heroku run rake db:migrate RAILS_ENV=production'
+run 'heroku run rake db:seed RAILS_ENV=production'
+run 'heroku run touch ./tmp/restart.txt'
+
 say <<-SAY
   ============================================================================
     Your new Refinery CMS application is now installed and mounts at '/'
-
-    heroku create
-    heroku run bundle install
-    heroku run rake db:migrate RAILS_ENV=production
-    heroku run rake db:seed RAILS_ENV=production
-    heroku run touch ./tmp/restart.txt
   ============================================================================
 SAY
 
