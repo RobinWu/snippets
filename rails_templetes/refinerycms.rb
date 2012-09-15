@@ -25,11 +25,18 @@ run 'bundle install'
 rake 'db:create'
 generate "refinery:cms --fresh-installation #{ARGV.join(' ')}"
 
+gsub_file 'config/initializers/refinery/i18n.rb', "", ""
+gsub_file 'config/initializers/refinery/i18n.rb', "# config.enabled = true", "config.enabled = true"
+gsub_file 'config/initializers/refinery/i18n.rb', "# config.default_locale = :en", "config.default_locale = 'zh-CN'"
+gsub_file 'config/initializers/refinery/i18n.rb', "# config.current_locale = :en", "config.current_locale = 'zh-CN'"
+gsub_file 'config/initializers/refinery/i18n.rb', "# config.default_frontend_locale = :en", "config.default_frontend_locale = 'zh-CN'"
+
 run 'git init'
 run 'git add .'
 run "git ci -m 'first commit'"
 
 run 'heroku create'
+run "git push heroku master"
 run 'heroku run bundle install'
 run 'heroku run rake db:migrate RAILS_ENV=production'
 run 'heroku run rake db:seed RAILS_ENV=production'
