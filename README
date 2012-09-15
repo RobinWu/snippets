@@ -8,6 +8,7 @@ curl -s https://github.com/RobinWu/snippets/raw/master/code/system_git_path.txt 
 │   ├── createdb
 │   ├── exp_csv
 │   ├── ffind
+│   ├── fpath
 │   ├── gist
 │   ├── jsformat
 │   ├── jsspider
@@ -18,7 +19,10 @@ curl -s https://github.com/RobinWu/snippets/raw/master/code/system_git_path.txt 
 ├── code
 │   ├── agideo_build_mailer.rb
 │   ├── convert_utf8_to_zh.rb
+│   ├── nongli.rb
 │   └── system_git_path.txt
+├── rails_templetes
+│   └── refinerycms.rb
 ├── README
 ├── scripts
 │   ├── backup.rake
@@ -46,4 +50,4 @@ curl -s https://github.com/RobinWu/snippets/raw/master/code/system_git_path.txt 
 └── text
     └── deploy_ubuntu.txt
 
-5 directories, 38 files
+6 directories, 41 files
