@@ -1,0 +1,65 @@
+#!/usr/bin/ruby
+
+# Example
+# parse_nginx -f <file> [-v]
+
+require 'optparse'
+
+options = Hash.new()
+opts = OptionParser.new() do |opts|
+  opts.on_tail("-h", "--help", "get help for this CMD") {
+    print(opts)
+    exit()
+  }
+  opts.on("-f", "--file String",  "default: /opt/nginx/conf/nginx.conf")                 { |v| options[:file]        = v }
+end
+opts.parse(ARGV)
+
+class Analyse
+  attr_accessor :file
+
+  PATTERNS = {
+    :listen => /listen\s*(\d*)/,
+    :root => /root\s*(\/.*public;)/,
+    :rails_env => /rails_env\s*(\w*)/
+  }
+
+  def initialize(options={})
+    @file = options[:file] || '/opt/nginx/conf/nginx.conf'
+    @verbose = options[:verbose]
+  end
+
+  def servers
+    @servers ||= begin
+      result = []
+      File.new(@file).read.scan(/(server\s*\{.*?\})/m) do |server|
+        tmp_h = {}
+        PATTERNS.each do |col, rgx|
+          server.first =~ PATTERNS[col]; tmp_h[col] = $1
+        end
+        result << tmp_h
+      end
+      result.sort_by{|i| i[:listen]}
+    end
+  end
+
+  def max_col_width(col)
+    servers.map{|i| i[col]}.map(&:to_s).map(&:size).max
+  end
+
+  def makeup_space(value, col)
+    " #{value}#{" " * (max_col_width(col) - value.size + 10)}"
+  end
+
+  def run
+    result = []
+    result << PATTERNS.map { |col, _| makeup_space(col.to_s, col) }.to_s
+    result << "-" * result.first.size
+    servers.each do |s|
+      result << s.map { |col, v| makeup_space(v.to_s, col) }.to_s
+    end
+    result
+  end
+end
+
+puts Analyse.new(options).run
