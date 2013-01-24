@@ -1,0 +1,47 @@
+#!/usr/bin/ruby
+
+def get_ip_freebsd  
+  ip = nil   
+  output = %x{/sbin/ifconfig}  
+  
+  output.split(/^\S/).each { |str|  
+      if str =~ /inet ([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/  
+          tmp = $1  
+          unless tmp =~ /127\./  
+              ip = tmp   
+              break  
+          end  
+      end  
+  }  
+  
+  ip  
+end  
+  
+def get_ip_linux  
+  ip = ''  
+  output = %x{/sbin/ifconfig}  
+  output.split(/^\S/).each { |str|  
+    if str =~ /inet addr:([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/  
+      tmp = $1  
+      unless tmp =~ /127\./  
+        ip = tmp   
+        break  
+      end   
+    end   
+  }     
+  ip    
+end  
+  
+def get_ip  
+  kernel = %x{uname -s}  
+  case kernel.strip.downcase  
+  when 'linux'   
+    get_ip_linux  
+  when 'freebsd'   
+    get_ip_freebsd  
+  else   
+    nil  
+  end  
+end  
+  
+puts get_ip
