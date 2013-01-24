@@ -18,11 +18,15 @@ opts.parse(ARGV)
 class Analyse
   attr_accessor :file
 
-  PATTERNS = {
+  COLS = {
     :listen => /listen\s*(\d*)/,
     :root => /root\s*(\/.*public;)/,
     :rails_env => /rails_env\s*(\w*)/
   }
+  EXTEND_COLS = {
+    :url => Proc.new{|h| "#{SYSTEM_IP}:#{h[:listen]}" }
+  }
+  SYSTEM_IP = `get_ip`.gsub(/\r|\n|\r\n/, '')
 
   def initialize(options={})
     @file = options[:file] || '/opt/nginx/conf/nginx.conf'
@@ -34,8 +38,11 @@ class Analyse
       result = []
       File.new(@file).read.scan(/(server\s*\{.*?\})/m) do |server|
         tmp_h = {}
-        PATTERNS.each do |col, rgx|
-          server.first =~ PATTERNS[col]; tmp_h[col] = $1
+        COLS.each do |col, rgx|
+          server.first =~ COLS[col]; tmp_h[col] = $1
+        end
+        EXTEND_COLS.each do |col, p|
+          tmp_h[col] = p.call(tmp_h)
         end
         result << tmp_h
       end
@@ -48,12 +55,12 @@ class Analyse
   end
 
   def makeup_space(value, col)
-    " #{value}#{" " * (max_col_width(col) - value.size + 10)}"
+    " #{value}#{" " * (max_col_width(col) - value.size + 2)}"
   end
 
   def run
     result = []
-    result << PATTERNS.map { |col, _| makeup_space(col.to_s, col) }.to_s
+    result << COLS.merge(EXTEND_COLS).map { |col, _| makeup_space(col.to_s, col) }.to_s
     result << "-" * result.first.size
     servers.each do |s|
       result << s.map { |col, v| makeup_space(v.to_s, col) }.to_s
